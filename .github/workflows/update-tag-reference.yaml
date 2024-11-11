@@ -1,0 +1,29 @@
+name: Test Changes in Test/Integ Clusters
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+  workflow_dispatch:
+
+jobs:
+  testRollout:
+    name: Change test tag reference to ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged != 'true' }}
+    environment: 'test'
+    permissions:
+      contents: write
+      security-events: write
+      packages: write
+      pull-requests: write
+    steps:
+      - name: Change test tag reference to ${{ github.ref_name }}
+        shell: bash
+        run: |
+          echo ${{ github.event }}
+          echo ${{ github.event.pull_request }}
+          echo ${{ github.event.pull_request.merged }}
